@@ -1,0 +1,11 @@
+.vjs-highlight-control {
+    cursor: pointer;
+}
+
+.vjs-highlight-control:before {
+    content: 'H';
+}
+
+.vjs-highlight-control:hover {
+    color: #d40f50;
+}
