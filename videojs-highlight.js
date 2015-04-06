@@ -1,5 +1,5 @@
 /*! videojs-highlight - v0.0.0 - 2015-3-27
- * Copyright (c) 2015 Daniel Röhers Moura
+ * Copyright (c) 2015 Daniel Röhers Moura
  * Licensed under the Apache-2.0 license. */
 (function(window, videojs) {
 
@@ -71,11 +71,36 @@
     var populateTime = function (currentTime) {
         if (!time.start) {
             time.start = currentTime;
+            _insertBar();
         } else {
+            _removeBar();
             time.end = currentTime;
             alert(JSON.stringify(time));
             initTime();
         }
+    };
+
+    var _insertBar = function () {
+        var progress = document.querySelector('.vjs-play-progress');
+        var barOriginal = progress.cloneNode();
+        barOriginal.classList.add('vjs-play-progress-original');
+        progress.classList.add('vjs-play-progress-highlight');
+        progress.parentNode.insertBefore(barOriginal, progress.nextSibling);
+    };
+
+    var _removeBar = function () {
+        var progress = document.querySelector('.vjs-play-progress');
+        var barOriginal = document.querySelector('.vjs-play-progress-original');
+        var barHighlight = progress.cloneNode();
+        barHighlight.style.left = barOriginal.style.width;
+        barHighlight.style.width = (_widthToNumber(barHighlight) - _widthToNumber(barOriginal)) + '%';
+        progress.classList.remove('vjs-play-progress-highlight');
+        progress.parentNode.insertBefore(barHighlight, progress.nextSibling);
+        barOriginal.remove();
+    };
+
+    var _widthToNumber = function (element) {
+        return Number(element.style.width.replace('%', ''));
     };
 
     /**

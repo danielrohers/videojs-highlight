@@ -9,3 +9,7 @@
 .vjs-highlight-control:hover {
     color: #d40f50;
 }
+
+.vjs-default-skin .vjs-play-progress-highlight {
+    background: #d40f50 !important;
+}
