@@ -9,14 +9,18 @@
         enable: false
     };
 
-    var time = {
+    var dataHighight = {
         start : null,
-        end : null
+        end : null,
+        left: null,
+        width: null
     };
 
-    var initTime = function () {
-        time.start = null;
-        time.end = null;
+    var initDataHighight = function () {
+        dataHighight.start = null;
+        dataHighight.end = null;
+        dataHighight.left = null;
+        dataHighight.width = null;
     };
 
     var dom = function(name, properties, assignmentProperties) {
@@ -37,6 +41,7 @@
     var createButton = function () {
         var control = dom('div', {
             class: 'vjs-highlight-control vjs-control',
+            'data-enable': false,
             role: 'button'
         });
 
@@ -46,8 +51,10 @@
 
         var text = dom('span', {
             class: 'vjs-control-text'
+        },
+        {
+            innerHTML: 'Highlight'
         });
-        text.innerHTML = 'Highlight'
 
         content.appendChild(text);
         control.appendChild(content);
@@ -64,19 +71,28 @@
         var button = document.querySelector('.vjs-highlight-control');
         var video = document.querySelector('video');
         button.addEventListener('click', function () {
+            toggleButtonColor(this);
             populateTime(video.currentTime);
         });
     };
 
+    var toggleButtonColor = function (button) {
+        if (button.dataset.enable === 'false') {
+            button.dataset.enable = true;
+        } else {
+            button.dataset.enable = false;
+        }
+    };
+
     var populateTime = function (currentTime) {
-        if (!time.start) {
-            time.start = currentTime;
+        if (!dataHighight.start) {
+            dataHighight.start = currentTime;
             _insertBar();
         } else {
             _removeBar();
-            time.end = currentTime;
-            alert(JSON.stringify(time));
-            initTime();
+            dataHighight.end = currentTime;
+            alert(JSON.stringify(dataHighight));
+            initDataHighight();
         }
     };
 
@@ -92,8 +108,8 @@
         var progress = document.querySelector('.vjs-play-progress');
         var barOriginal = document.querySelector('.vjs-play-progress-original');
         var barHighlight = progress.cloneNode();
-        barHighlight.style.left = barOriginal.style.width;
-        barHighlight.style.width = (_widthToNumber(barHighlight) - _widthToNumber(barOriginal)) + '%';
+        barHighlight.style.left = dataHighight.left = barOriginal.style.width;
+        barHighlight.style.width = dataHighight.width = (_widthToNumber(barHighlight) - _widthToNumber(barOriginal)) + '%';
         progress.classList.remove('vjs-play-progress-highlight');
         progress.parentNode.insertBefore(barHighlight, progress.nextSibling);
         barOriginal.remove();
@@ -113,7 +129,7 @@
 
         // TODO: write some amazing plugin code
         if (settings.enable) {
-            initTime();
+            initDataHighight();
             insertButton();
             eventClick();
         }

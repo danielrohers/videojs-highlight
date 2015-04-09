@@ -6,6 +6,7 @@
     content: 'H';
 }
 
+.vjs-highlight-control[data-enable="true"],
 .vjs-highlight-control:hover {
     color: #d40f50;
 }
